@@ -18,6 +18,8 @@ T_SID = os.getenv('T_SID')
 T_AUTH_TOKEN = os.getenv('T_AUTH_TOKEN')
 T_FROM_NO = os.getenv('T_FROM_NO')
 
+app.logger.info('Environment loaded.')
+
 
 @app.route('/find_song', methods=['GET'])
 def find_song():
@@ -28,6 +30,7 @@ def find_song():
     else:
         response_message = 'that could be anything man'
 
+    app.logger.info('Sending SMS response: {}'.format(response_message))
     send_sms_response(from_, response_message)
 
     return response_message
@@ -41,6 +44,7 @@ def do_search_request(lyrics):
     try:
         response = requests.get(G_SEARCH_URL, params=params)
     except Exception as e:
+        app.logger.error('Exception during search request: {}'.format(e))
         return 'Sorry I am broken. {}'.format(e)
 
     return parse_search_response(response)
@@ -51,19 +55,28 @@ def parse_search_response(response):
     items = results.get('items')
     if items:
         first_hit = items[0]['title']
-        return respond_with_hit(first_hit)
+        message = respond_with_hit(first_hit)
     else:
-        return 'Hmm, that doesn\'t sound like anything I know..'
+        message = 'Hmm, that doesn\'t sound like anything I know..'
+
+    app.logger.info('Search results resolved to: {}'.format(message))
+    return message
 
 
 def respond_with_hit(result_string):
     match = re.match('(.*)\ Lyrics\ -\ (.*)', result_string)
-    song = match.group(1)
-    artist = match.group(2)
-    return get_random_template().format(song=song, artist=artist)
+    if len(match.groups()) == 2:
+        song = match.group(1)
+        artist = match.group(2)
+        message = get_random_template().format(song=song, artist=artist)
+    else:
+        message = 'Hmm, that doesn\'t sound like anything I know..'
+
+    return message
 
 
 def get_random_template():
+
     templates = [
         'whoah dude i LOOOOVE {artist}! not that song though.',
         'hey that\'s totally {song} by {artist}!!1 sing it again!',
@@ -72,6 +85,7 @@ def get_random_template():
         '{song}, by {artist}. what a hit. *sigh*',
         '{artist}, really? you have terrible taste.'
     ]
+
     return random.choice(templates)
 
 
