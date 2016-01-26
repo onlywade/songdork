@@ -51,7 +51,7 @@ def do_search_request(lyrics):
 
 
 def parse_search_response(response):
-    results = json.loads(response.content)
+    results = json.loads(response.content.decode('utf-8'))
     items = results.get('items')
     if items:
         first_hit = items[0]['title']
