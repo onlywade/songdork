@@ -11,7 +11,7 @@ app = Flask(__name__)
 app.debug = True
 
 G_API_KEY = os.getenv('G_API_KEY')
-G_CX_ID = os.getenv('G_CX_ID')
+G_CX_ID = os.getenv('G_CX_ID') # this custom search engine is configured to search a specific lyrics site
 G_SEARCH_URL = 'https://www.googleapis.com/customsearch/v1'
 
 T_SID = os.getenv('T_SID')
@@ -24,7 +24,10 @@ SONG_UNKNOWN_MESSAGE = 'Hmm, that doesn\'t sound at all familiar. Try singing it
 @app.route('/twilio_callback', methods=['GET'])
 def twilio_callback():
     """
-    Main entrypoint. (Callback from Twilio upon receipt of SMS message.)
+    Main entrypoint. (Called from Twilio upon receipt of SMS message.)
+
+    The body of the message is expected to contain some song lyrics to be identified. After finding a matching song
+    and artist (or failing to), send an SMS back to the original sender with results.
     """
     origin_number = request.args.get('From')    # number the SMS originated from
     partial_lyrics = request.args.get('Body')   # body of SMS, presumed to be song lyrics
@@ -42,8 +45,8 @@ def twilio_callback():
 
 def find_artist_and_song(lyrics):
     """
-    Given a snippet of lyrics, searches lyricsfreak for a suitable match.
-    Returns an (artist, song) tuple, or None if no results found.
+    Given a snippet of lyrics, search a lyrics website (specified in CSE config) for the first match.
+    Return an (artist, song) tuple, or None if no results found.
     """
 
     # google custom search engine API params
@@ -64,7 +67,7 @@ def find_artist_and_song(lyrics):
 
 def message_for_artist_and_song(artist_and_song):
     """
-    Given an (artist, song) tuple, returns a nice message about it.
+    Given an (artist, song) tuple, return a nice message about it.
     """
     if artist_and_song:
         artist = artist_and_song[0]
@@ -76,11 +79,11 @@ def message_for_artist_and_song(artist_and_song):
 
 def get_random_message_template():
     """
-    Returns a random result message for interpolating artist/song into.
+    Return a random result message for interpolating artist/song into.
     """
 
     templates = [
-        'whoah dude i LOOOOVE {artist}! not that song though.',
+        'whoah dude i LOOOOVE {artist}! not that song ({song}) though.',
         'hey that\'s totally {song} by {artist}!!1 sing it again!',
         'oooooo, {song} by {artist}, huh? good one.',
         'oh man, {artist} are the worst. ESPECIALLY {song}.',
@@ -98,7 +101,7 @@ def get_random_message_template():
 
 def parse_result(result_string):
     """
-    Given a result entry from the Google search API, returns an (artist, song) tuple or None
+    Given a result entry from the Google search API, return an (artist, song) tuple or None
     """
 
     match = re.match('(.*)\ Lyrics\ -\ (.*)', result_string)
@@ -112,7 +115,7 @@ def parse_result(result_string):
 
 def send_sms(to, message):
     """
-    Just sends a text.
+    Just send a text message to a recipient.
     """
     client = TwilioRestClient(T_SID, T_AUTH_TOKEN)
     client.messages.create(to=to, from_=T_FROM_NO, body=message)
