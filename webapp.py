@@ -8,7 +8,7 @@ import requests
 from twilio.rest import TwilioRestClient
 
 app = Flask(__name__)
-app.debug = True
+app.debug = False
 
 G_API_KEY = os.getenv('G_API_KEY')
 G_CX_ID = os.getenv('G_CX_ID') # this custom search engine is configured to search a specific lyrics site
