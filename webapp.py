@@ -21,6 +21,10 @@ T_FROM_NO = os.getenv('T_FROM_NO')
 SONG_UNKNOWN_MESSAGE = 'Hmm, that doesn\'t sound at all familiar. Try singing it louder next time.'
 
 
+@app.route('/healthcheck', methods=['GET'])
+def healthcheck():
+    return 'OK'
+
 @app.route('/twilio_callback', methods=['GET'])
 def twilio_callback():
     """
