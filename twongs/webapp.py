@@ -9,12 +9,12 @@ from twilio.rest import Client
 
 app = Flask(__name__)
 
-G_API_KEY = os.getenv('G_API_KEY')
-G_CX_ID = os.getenv('G_CX_ID') # this custom search engine is configured to search a specific lyrics site
+G_API_KEY = os.getenv('SECRET_GOOGLE_API_KEY')
+G_CX_ID = os.getenv('SECRET_GOOGLE_CX_ID') # this custom search engine is configured to search a specific lyrics site
 G_SEARCH_URL = 'https://www.googleapis.com/customsearch/v1'
 
-T_SID = os.getenv('T_SID')
-T_AUTH_TOKEN = os.getenv('T_AUTH_TOKEN')
+T_SID = os.getenv('SECRET_TWILIO_ACCOUNT_SID')
+T_AUTH_TOKEN = os.getenv('SECRET_TWILIO_API_TOKEN')
 T_FROM_NO = os.getenv('T_FROM_NO')
 
 SONG_UNKNOWN_MESSAGE = 'Hmm, that doesn\'t sound at all familiar. Try singing it louder next time.'
