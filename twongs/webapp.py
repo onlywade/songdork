@@ -5,10 +5,9 @@ import re
 
 from flask import Flask, request
 import requests
-from twilio.rest import TwilioRestClient
+from twilio.rest import Client
 
 app = Flask(__name__)
-app.debug = False
 
 G_API_KEY = os.getenv('G_API_KEY')
 G_CX_ID = os.getenv('G_CX_ID') # this custom search engine is configured to search a specific lyrics site
@@ -121,10 +120,5 @@ def send_sms(to, message):
     """
     Just send a text message to a recipient.
     """
-    client = TwilioRestClient(T_SID, T_AUTH_TOKEN)
+    client = Client(T_SID, T_AUTH_TOKEN)
     client.messages.create(to=to, from_=T_FROM_NO, body=message)
-
-
-if __name__ == '__main__':
-    port = int(os.environ.get('PORT', 5000))
-    app.run(host='0.0.0.0', port=port)
