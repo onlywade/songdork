@@ -108,7 +108,7 @@ def parse_result(result_string):
     """
 
     match = re.match('(.*)\ Lyrics\ -\ (.*)', result_string)
-    if len(match.groups()) == 2:
+    if match is not None and len(match.groups()) == 2:
         song = match.group(1)
         artist = match.group(2)
         return (artist, song)
