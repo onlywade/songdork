@@ -3,12 +3,12 @@ FROM python:3.8.2-alpine3.11
 ENV FLASK_APP=twongs.webapp:app
 ENV FLASK_ENV=development
 
-COPY . /app
-
 WORKDIR /app
 
+COPY requirements.txt /app/requirements.txt
 RUN pip install -r requirements.txt
 
+COPY . /app
 RUN pip install --editable .
 
 EXPOSE 5000
