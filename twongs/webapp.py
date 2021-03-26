@@ -107,10 +107,10 @@ def parse_result(result_string):
     Given a result entry from the Google search API, return an (artist, song) tuple or None
     """
 
-    match = re.match('(.*)\ Lyrics\ -\ (.*)', result_string)
+    match = re.match('(.*)\ -\ (.*) \|', result_string)
     if match is not None and len(match.groups()) == 2:
-        song = match.group(1)
-        artist = match.group(2)
+        artist = match.group(1)
+        song = match.group(2)
         return (artist, song)
     else:
         return None
