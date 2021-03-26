@@ -95,7 +95,7 @@ def get_random_message_template():
         'yay, {artist} really does the best rendition of {song}, huh.',
         'oh yeah, {song} by that band {artist}, i\'ve always liked that one.',
         'wow, hearing {artist} brings me back to like, 4th grade.',
-        'that\'s that song {song} by those guys {artist}, isn\'t it?',
+        'that\'s that song {song} by, um -- oh yeah {artist}, isn\'t it?',
         'hmm sounds like {song} as performed by the great {artist}.',
     ]
 
