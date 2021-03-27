@@ -91,13 +91,13 @@ def get_random_message_template():
         'oooooo, {song} by {artist}, huh? good one.',
         'oh man, {artist} are the worst. ESPECIALLY {song}.',
         '{song}, by {artist}. what a hit. *sigh*',
-        '{artist}, really? you have terrible taste.',
+        '{artist}, really? please no.',
         'yay, {artist} really does the best rendition of {song}, huh.',
         'oh yeah, {song} by that band {artist}, i\'ve always liked that one.',
-        'wow, hearing {artist} brings me back to like, 4th grade.',
+        'wow, hearing {artist} singing {song} totally brings me back to like, 4th grade.',
         'that\'s that song {song} by those guys {artist}, isn\'t it?',
         'hmm sounds like {song} as performed by the great {artist}.',
-        'oh dang, rockin\' that {artist}! that shit bangs.',
+        'oh damn, rockin\' that {artist}! that song {song} baaangs.',
     ]
 
     return random.choice(templates)
