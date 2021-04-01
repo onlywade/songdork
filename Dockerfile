@@ -1,7 +1,6 @@
 FROM python:3.8.2-alpine3.11
 
 ENV FLASK_APP=songdork.webapp:app
-ENV FLASK_ENV=development
 
 WORKDIR /app
 
